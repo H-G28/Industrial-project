@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Diamond Aura{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-dark text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-3 fw-bold mb-4">Discover the Brilliance</h1>
+                <p class="lead mb-4">Exquisite diamond jewelry that embodies elegance, luxury, and timeless beauty.</p>
+                <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg">Shop Now</a>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="fas fa-gem" style="font-size: 15rem; color: #d4af37;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Categories Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Shop by Category</h2>
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-3 mb-4">
+                <a href="{% url 'product_list' %}?category={{ category.id }}" class="text-decoration-none">
+                    <div class="card h-100 text-center hover-shadow">
+                        <div class="card-body">
+                            <i class="fas fa-gem fa-3x mb-3" style="color: #d4af37;"></i>
+                            <h5 class="card-title">{{ category.name }}</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center text-muted">No categories available.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Featured Products</h2>
+        <div class="row">
+            {% for product in featured_products %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    {% if product.images.first %}
+                        <img src="{{ product.images.first.image_path.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
+                            <i class="fas fa-gem fa-4x text-white"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text text-muted">{{ product.category.name }}</p>
+                        <p class="card-text"><strong>₹{{ product.price }}</strong></p>
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center text-muted">No products available.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'product_list' %}" class="btn btn-outline-primary">View All Products</a>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Why Choose Diamond Aura</h2>
+        <div class="row">
+            <div class="col-md-3 text-center mb-4">
+                <i class="fas fa-certificate fa-3x mb-3" style="color: #d4af37;"></i>
+                <h5>Certified Quality</h5>
+                <p>All diamonds are certified for authenticity</p>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <i class="fas fa-shipping-fast fa-3x mb-3" style="color: #d4af37;"></i>
+                <h5>Fast Delivery</h5>
+                <p>Quick and secure shipping</p>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <i class="fas fa-undo fa-3x mb-3" style="color: #d4af37;"></i>
+                <h5>Easy Returns</h5>
+                <p>Hassle-free return policy</p>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <i class="fas fa-headset fa-3x mb-3" style="color: #d4af37;"></i>
+                <h5>24/7 Support</h5>
+                <p>Always here to help you</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .hover-shadow {
+        transition: box-shadow 0.3s ease;
+    }
+    .hover-shadow:hover {
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
