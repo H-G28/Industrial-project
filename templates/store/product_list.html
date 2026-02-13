@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Products - Diamond Aura{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">Our Collection</h1>
+    
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Filters</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Search -->
+                    <form method="get" class="mb-3">
+                        <input type="text" name="search" class="form-control" placeholder="Search products..." value="{{ request.GET.search }}">
+                        <button type="submit" class="btn btn-primary btn-sm w-100 mt-2">Search</button>
+                    </form>
+                    
+                    <!-- Categories -->
+                    <h6>Categories</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'product_list' %}" class="text-decoration-none">All</a></li>
+                        {% for category in categories %}
+                        <li>
+                            <a href="?category={{ category.id }}" class="text-decoration-none
+                                {% if selected_category == category.id|stringformat:'s' %}fw-bold{% endif %}">
+                                {{ category.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Products Grid -->
+        <div class="col-md-9">
+            <div class="row">
+                {% for product in products %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        {% if product.images.first %}
+                            <img src="{{ product.images.first.image_path.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
+                                <i class="fas fa-gem fa-4x text-white"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text text-muted small">{{ product.category.name }}</p>
+                            <p class="card-text">{{ product.description|truncatewords:10 }}</p>
+                            <p class="mb-2"><small class="text-muted"><i class="fas fa-gem"></i> {{ product.carat }} Carat</small></p>
+                            <h5 class="text-primary">₹{{ product.price }}</h5>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle"></i> No products found.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
